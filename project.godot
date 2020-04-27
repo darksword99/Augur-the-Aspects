@@ -16,6 +16,11 @@ _global_script_class_icons={
 [application]
 
 config/name="Augur the Aspects"
+run/main_scene="res://src/scene_handler.tscn"
+
+[autoload]
+
+PlayerStore="*res://src/player_store.gd"
 
 [display]
 

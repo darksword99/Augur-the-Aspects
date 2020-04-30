@@ -2,9 +2,9 @@
 
 [ext_resource path="res://src/battle/player/player.gd" type="Script" id=1]
 [ext_resource path="res://assets/battle/tmp/player.png" type="Texture" id=2]
-[ext_resource path="res://src/battle/player/idle.gd" type="Script" id=3]
+[ext_resource path="res://src/battle/player/staggered.gd" type="Script" id=3]
 [ext_resource path="res://src/battle/player/moving.gd" type="Script" id=4]
-[ext_resource path="res://src/battle/player/staggered.gd" type="Script" id=5]
+[ext_resource path="res://src/battle/player/idle.gd" type="Script" id=5]
 [ext_resource path="res://src/battle/player/casting.gd" type="Script" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -23,13 +23,13 @@ texture = ExtResource( 2 )
 [node name="states" type="Node" parent="."]
 
 [node name="staggered" type="Node" parent="states"]
-script = ExtResource( 5 )
+script = ExtResource( 3 )
 
 [node name="moving" type="Node" parent="states"]
 script = ExtResource( 4 )
 
 [node name="idle" type="Node" parent="states"]
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 
 [node name="casting" type="Node" parent="states"]
 script = ExtResource( 6 )

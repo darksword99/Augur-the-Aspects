@@ -12,7 +12,7 @@ var progress_texture_path = "res://assets/hud/Mana Bar 3 Thirds.png"
 func _ready() -> void:
 	var h_box = get_node("HBoxContainer")
 	var under_texture = load(under_texture_path)
-	var progress_texture = load(under_texture_path)
+	var progress_texture = load(progress_texture_path)
 	
 	# Creates a number of segements based on number_of_segments variable.
 	# Adds all segments to list_of_segments, and adds all segemts as childs of
@@ -26,8 +26,9 @@ func _ready() -> void:
 		list_of_segments.append(new_segment)
 
 
-func _process(delta: float) -> void:
+func _on_Timer_timeout() -> void:
 	if player_idle:
 		for i in list_of_segments:
-			print(i)
-			i.value = 20
+			if i.value < 50:
+				i.value += 1
+				break

@@ -7,7 +7,7 @@ var list_of_segments = []
 var player_idle = true
 var under_texture_path = "res://assets/hud/Mana Bar 0 Thirds.png"
 var progress_texture_path = "res://assets/hud/Mana Bar 3 Thirds.png"
-
+var states = ["staggered","moving","idle","casting"]
 
 func _ready() -> void:
 	var h_box = get_node("HBoxContainer")
@@ -32,3 +32,10 @@ func _on_Timer_timeout() -> void:
 			if i.value < 50:
 				i.value += 1
 				break
+
+
+func _on_player_player_state_update(state):
+	if state == states[1]:
+		$Timer.stop()
+	elif state == states[2]:
+		$Timer.start()

@@ -5,6 +5,8 @@
 
 extends KinematicBody2D
 
+signal player_state_update(state) #expect string
+
 export var speed: int = 100
 
 var health: int
@@ -42,6 +44,7 @@ func _physics_process(delta: float):
 func _change_state(new_state: String):
 	if new_state != current_state:
 		print(new_state)
+		emit_signal("player_state_update", new_state)
 		current_state = new_state
 
 # differs taking damage to the state the player is in

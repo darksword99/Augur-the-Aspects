@@ -1,14 +1,33 @@
 extends Control
 
-onready var bar1 = $"HBoxContainer/mana_bar_1"
-onready var bar2 = $"HBoxContainer/mana_bar_2"
-onready var bar3 = $"HBoxContainer/mana_bar_3"
+
+var number_of_segments = 3
+
+var list_of_segments = []
+var player_idle = true
+var under_texture_path = "res://assets/hud/Mana Bar 0 Thirds.png"
+var progress_texture_path = "res://assets/hud/Mana Bar 3 Thirds.png"
 
 
-func _on_Timer_timeout() -> void:
-	if bar1.value < 50:
-		bar1.value += 1
-	elif bar2.value < 50:
-		bar2.value += 1
-	elif bar3.value < 50:
-		bar3.value += 1
+func _ready() -> void:
+	var h_box = get_node("HBoxContainer")
+	var under_texture = load(under_texture_path)
+	var progress_texture = load(under_texture_path)
+	
+	# Creates a number of segements based on number_of_segments variable.
+	# Adds all segments to list_of_segments, and adds all segemts as childs of
+	# the HBoxContainer. 
+	for i in range(number_of_segments):
+		var new_segment = TextureProgress.new()
+		new_segment.set_under_texture(under_texture)
+		new_segment.set_progress_texture(progress_texture)
+		new_segment.max_value = 50
+		h_box.add_child(new_segment)
+		list_of_segments.append(new_segment)
+
+
+func _process(delta: float) -> void:
+	if player_idle:
+		for i in list_of_segments:
+			print(i)
+			i.value = 20

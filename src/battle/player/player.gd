@@ -17,7 +17,6 @@ var current_state: String
 
 onready var stagger_timer = $stagger_timer
 onready var joystick = $camera_and_hud/hud_canvas_layer/joystick/joystick_button
-onready var animate_tree = $animation_tree
 
 onready var states_map = {
 	"staggered": $states/staggered,
@@ -38,7 +37,7 @@ func _ready():
 func _physics_process(_delta: float):
 	# defers the call to the script accosiated with the current state
 	# uses the joystick value to determine movement
-	var new_state = states_map[current_state].physics(self, joystick.get_value(), animate_tree)
+	var new_state = states_map[current_state].physics(self, joystick.get_value())
 	_change_state(new_state)
 
 # changes state, we will eventually add animations with this function
@@ -65,7 +64,3 @@ func die():
 # when the player exits stagger
 func _on_stagger_timer_timeout():
 	_change_state("idle")
-
-
-func _on_idle_exited_idle():
-	pass # Replace with function body.

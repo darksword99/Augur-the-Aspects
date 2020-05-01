@@ -218,7 +218,7 @@ script = ExtResource( 1 )
 [node name="player_sprite" type="Sprite" parent="."]
 texture = ExtResource( 9 )
 hframes = 48
-frame = 41
+frame = 43
 
 [node name="movement_collider" type="CollisionShape2D" parent="."]
 position = Vector2( -2.29341, 10.695 )

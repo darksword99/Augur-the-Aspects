@@ -20,9 +20,7 @@ func physics(player: KinematicBody2D, movement: Vector2) -> String:
 		# move player, apply vector to movement property
 		player.movement = player.move_and_slide(movement * player.speed)
 		return "moving"
-		
 	else:
-		# do idle animations here
 		return "idle"
 
 func take_damage(player: KinematicBody2D, damage: int) -> String:

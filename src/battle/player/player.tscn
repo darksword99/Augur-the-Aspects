@@ -246,10 +246,12 @@ anims/walk_right = SubResource( 9 )
 [node name="animation_tree" type="AnimationTree" parent="animation_handler"]
 tree_root = SubResource( 22 )
 anim_player = NodePath("../animation_player")
-active = true
 parameters/playback = SubResource( 23 )
 parameters/idle_animations/blend_position = Vector2( 0, 0 )
 parameters/walk_animations/blend_position = Vector2( 0, 0 )
+__meta__ = {
+"_editor_description_": "ACTIVE is set to off and then enabled in script to stop the console from being spammed with errors. Not sure of cause."
+}
 
 [node name="states" type="Node" parent="."]
 

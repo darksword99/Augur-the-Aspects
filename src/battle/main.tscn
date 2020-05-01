@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/battle/background_cobblestone.png" type="Texture" id=1]
-[ext_resource path="res://src/battle/player/battle.gd" type="Script" id=2]
+[ext_resource path="res://src/battle/battle.gd" type="Script" id=2]
 [ext_resource path="res://src/battle/player.tscn" type="PackedScene" id=3]
 
 [node name="main" type="Node2D"]

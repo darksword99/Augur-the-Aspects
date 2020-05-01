@@ -1,20 +1,29 @@
 #
-# res://src/battle/player/moving.gd
+# res://src/battle/player/staggered.gd
 # handles movement and damage while casting
 #
 extends Node
 
-func physics(player, movement, a_tree) -> String:
+signal entered_staggered
+signal exited_staggered
+
+func on_enter_state():
+	emit_signal("entered_staggered")
+	
+func on_exit_state():
+	emit_signal("exited_staggered")
+
+func physics(player: KinematicBody2D, movement: Vector2, animation_tree: AnimationTree) -> String:
 	var direction_vector = movement.normalized()
 	# next line is pretty bad..
-	var a_state = a_tree.get("parameters/playback")
+	var animation_state = animation_tree.get("parameters/playback")
 	
 	# if joystick moved, player moves in that direction
 	if (movement != Vector2.ZERO):
 		# do moving animations here
-		a_tree.set("parameters/idle_animations/blend_position", direction_vector)
-		a_tree.set("parameters/walk_animations/blend_position", direction_vector)
-		a_state.travel("walk_animations")
+		animation_tree.set("parameters/idle_animations/blend_position", direction_vector)
+		animation_tree.set("parameters/walk_animations/blend_position", direction_vector)
+		animation_state.travel("walk_animations")
 		# move player
 		player.movement = player.move_and_slide(movement * player.speed)
 		

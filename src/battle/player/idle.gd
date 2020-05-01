@@ -1,27 +1,37 @@
 #
-# res://src/battle/player/moving.gd
+# res://src/battle/player/idle.gd
 # handles movement and damage while moveing
 #
 extends Node
 
-func physics(player: KinematicBody2D, movement: Vector2, a_tree: AnimationTree) -> String:
+signal entered_idle
+signal exited_idle
+
+func on_enter_state():
+	emit_signal("entered_idle")
+	
+func on_exit_state():
+	emit_signal("exited_idle")
+
+
+func physics(player: KinematicBody2D, movement: Vector2, animation_tree: AnimationTree) -> String:
 	var direction_vector = movement.normalized()
 	# next line is pretty bad..
-	var a_state = a_tree.get("parameters/playback")
+	var animation_state = animation_tree.get("parameters/playback")
 	
 	# if joystick moved, player moves in that direction
 	if (movement != Vector2.ZERO):
 		# do moving animations here
-		a_tree.set("parameters/idle_animations/blend_position", direction_vector)
-		a_tree.set("parameters/walk_animations/blend_position", direction_vector)
-		a_state.travel("walk_animations")
+		animation_tree.set("parameters/idle_animations/blend_position", direction_vector)
+		animation_tree.set("parameters/walk_animations/blend_position", direction_vector)
+		animation_state.travel("walk_animations")
 		# move player, apply vector to movement property
 		player.movement = player.move_and_slide(movement * player.speed)
 		return "moving"
 		
 	else:
 		# do idle animations here
-		a_state.travel("idle_animations")
+		animation_state.travel("idle_animations")
 		return "idle"
 
 func take_damage(player: KinematicBody2D, damage: int) -> String:

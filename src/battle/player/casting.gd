@@ -5,6 +5,15 @@
 
 extends Node
 
+signal entered_casting
+signal exited_casting
+
+func on_enter_state():
+	emit_signal("entered_casting")
+	
+func on_exit_state():
+	emit_signal("exited_casting")
+
 # as player can't move or take damage during casting, this is a boring script
 func physics(_player, _movement, _a_tree) -> String:
 	return "casting"

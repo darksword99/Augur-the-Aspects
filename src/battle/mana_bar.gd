@@ -6,15 +6,10 @@ export var number_of_segments: int  = 3 # Minimum value is 1
 var mana_total = 0 # Each segment contains 38 max mana
 var list_of_segments = []
 var player_idle = true
-var under_texture_path = "res://assets/hud/mana_bar_empty.png"
-var progress_texture_path = "res://assets/hud/mana_bar_full.png"
-
 
 func _ready():
 	var h_box = $HBoxContainer
 	list_of_segments.append($HBoxContainer/mana_bar_segment)
-	var under_texture = load(under_texture_path)
-	var progress_texture = load(progress_texture_path)
 	
 	# Creates a number of segements based on number_of_segments variable.
 	# Adds all segments to list_of_segments, and adds all segemts as childs of

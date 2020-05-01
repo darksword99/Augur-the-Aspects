@@ -6,7 +6,7 @@
 extends Node
 
 # as player can't move or take damage during casting, this is a boring script
-func physics(_player, _mouse_pos, _delta) -> String:
+func physics(_player, _movement, _a_tree) -> String:
 	return "casting"
 
 func take_damage(_player, _damage: int) -> String:

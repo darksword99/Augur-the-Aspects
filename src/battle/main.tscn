@@ -17,8 +17,6 @@ script = ExtResource( 2 )
 position = Vector2( 117.23, 237.283 )
 texture = ExtResource( 1 )
 
-[node name="player" parent="." instance=ExtResource( 3 )]
-
 [node name="TEST_SANS" type="Area2D" parent="."]
 position = Vector2( 111.142, 184.807 )
 script = ExtResource( 5 )
@@ -32,4 +30,8 @@ texture = ExtResource( 4 )
 
 [node name="mana_bar" parent="." instance=ExtResource( 6 )]
 [connection signal="player_state_update" from="player" to="mana_bar" method="_on_player_player_state_update"]
+
+[node name="player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 170.307, 268.535 )
+
 [connection signal="body_entered" from="TEST_SANS" to="TEST_SANS" method="_on_TEST_SANS_body_entered"]

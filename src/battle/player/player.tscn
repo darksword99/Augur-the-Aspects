@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://src/battle/player/player.gd" type="Script" id=1]
 [ext_resource path="res://src/battle/hud.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://src/battle/player/moving.gd" type="Script" id=4]
 [ext_resource path="res://src/battle/player/idle.gd" type="Script" id=5]
 [ext_resource path="res://src/battle/player/casting.gd" type="Script" id=6]
+[ext_resource path="res://src/battle/player/animation_handler.gd" type="Script" id=7]
 [ext_resource path="res://assets/battle/player/main-character-sprite-sheet.png" type="Texture" id=9]
 
 [sub_resource type="CapsuleShape2D" id=1]
@@ -206,19 +207,15 @@ blend_mode = 1
 states/idle_animations/node = SubResource( 14 )
 states/idle_animations/position = Vector2( 467, 119 )
 states/walk_animations/node = SubResource( 19 )
-states/walk_animations/position = Vector2( 749, 119 )
+states/walk_animations/position = Vector2( 750, 119 )
 transitions = [ "idle_animations", "walk_animations", SubResource( 20 ), "walk_animations", "idle_animations", SubResource( 21 ) ]
 start_node = "idle_animations"
+graph_offset = Vector2( 68, -13 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=23]
 
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
-
-[node name="player_sprite" type="Sprite" parent="."]
-texture = ExtResource( 9 )
-hframes = 48
-frame = 43
 
 [node name="movement_collider" type="CollisionShape2D" parent="."]
 position = Vector2( -2.29341, 10.695 )
@@ -227,7 +224,16 @@ shape = SubResource( 1 )
 
 [node name="stagger_timer" type="Timer" parent="."]
 
-[node name="movement_animator" type="AnimationPlayer" parent="."]
+[node name="player_sprite" type="Sprite" parent="."]
+texture = ExtResource( 9 )
+hframes = 48
+frame = 32
+
+[node name="animation_handler" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="animation_player" type="AnimationPlayer" parent="animation_handler"]
+root_node = NodePath("../..")
 anims/idle_back = SubResource( 2 )
 anims/idle_front = SubResource( 3 )
 anims/idle_left = SubResource( 4 )
@@ -237,9 +243,9 @@ anims/walk_front = SubResource( 7 )
 anims/walk_left = SubResource( 8 )
 anims/walk_right = SubResource( 9 )
 
-[node name="animation_tree" type="AnimationTree" parent="."]
+[node name="animation_tree" type="AnimationTree" parent="animation_handler"]
 tree_root = SubResource( 22 )
-anim_player = NodePath("../movement_animator")
+anim_player = NodePath("../animation_player")
 active = true
 parameters/playback = SubResource( 23 )
 parameters/idle_animations/blend_position = Vector2( 0, 0 )
@@ -261,5 +267,9 @@ script = ExtResource( 6 )
 
 [node name="camera_and_hud" parent="." instance=ExtResource( 2 )]
 [connection signal="timeout" from="stagger_timer" to="." method="_on_stagger_timer_timeout"]
+[connection signal="entered_staggered" from="states/staggered" to="animation_handler" method="_on_player_entered_staggered"]
+[connection signal="entered_moving" from="states/moving" to="animation_handler" method="_on_player_entered_moving"]
+[connection signal="entered_idle" from="states/idle" to="animation_handler" method="_on_player_entered_idle"]
 [connection signal="entered_idle" from="states/idle" to="camera_and_hud" method="_on_player_entered_idle"]
 [connection signal="exited_idle" from="states/idle" to="camera_and_hud" method="_on_player_exited_idle"]
+[connection signal="entered_casting" from="states/casting" to="animation_handler" method="_on_player_entered_casting"]

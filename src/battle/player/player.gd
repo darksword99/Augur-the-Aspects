@@ -5,7 +5,6 @@
 
 extends KinematicBody2D
 
-signal player_state_update(state) #expect string
 # currently used for max speed
 export var speed: int = 100
 # holds a vector for camera use
@@ -17,7 +16,7 @@ var velocity: Vector2
 var current_state: String
 
 onready var stagger_timer = $stagger_timer
-onready var joystick = $hud/joystick/joystick_button
+onready var joystick = $camera_and_hud/hud_canvas_layer/joystick/joystick_button
 onready var animate_tree = $animation_tree
 
 onready var states_map = {
@@ -35,8 +34,6 @@ func _ready():
 	#sets inital velocity and current state
 	velocity = Vector2.ZERO
 	current_state = "idle"
-	
-	# TODO: ask people smarter than me how to do this better
 
 func _physics_process(_delta: float):
 	# defers the call to the script accosiated with the current state
@@ -47,8 +44,8 @@ func _physics_process(_delta: float):
 # changes state, we will eventually add animations with this function
 func _change_state(new_state: String):
 	if new_state != current_state:
-		print(new_state)
-		emit_signal("player_state_update", new_state)
+		states_map[current_state].on_exit_state()
+		states_map[new_state].on_enter_state()
 		current_state = new_state
 
 # differs taking damage to the state the player is in
@@ -68,3 +65,7 @@ func die():
 # when the player exits stagger
 func _on_stagger_timer_timeout():
 	_change_state("idle")
+
+
+func _on_idle_exited_idle():
+	pass # Replace with function body.

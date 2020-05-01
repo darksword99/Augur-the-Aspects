@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://src/battle/mana_bar.gd" type="Script" id=1]
+[ext_resource path="res://src/battle/player/mana_bar.gd" type="Script" id=1]
 [ext_resource path="res://src/battle/player/camera.gd" type="Script" id=2]
 [ext_resource path="res://src/battle/player/joystick_button.gd" type="Script" id=3]
 [ext_resource path="res://assets/battle/player/joystick-button-off.png" type="Texture" id=4]
@@ -64,4 +64,7 @@ texture_progress = ExtResource( 8 )
 [node name="Timer" type="Timer" parent="hud_canvas_layer/mana_bar"]
 wait_time = 0.08
 autostart = true
+__meta__ = {
+"_editor_description_": "NOTE: wait time is set in mana bar"
+}
 [connection signal="timeout" from="hud_canvas_layer/mana_bar/Timer" to="hud_canvas_layer/mana_bar" method="_on_Timer_timeout"]

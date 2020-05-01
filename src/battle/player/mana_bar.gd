@@ -1,33 +1,25 @@
 extends Control
 
 
-var number_of_segments = 3 # Minimum value is 1
+export var number_of_segments = 3 # Minimum value is 1
+export var tick_time = 0.08
 
-var mana_total = 0 # Each segment contains 38 mana.
+var mana_total = 0 # Each segment contains 38 max mana
 var list_of_segments = []
 var player_idle = true
-var under_texture_path = "res://assets/hud/mana_bar_empty.png"
-var progress_texture_path = "res://assets/hud/mana_bar_full.png"
-var states = ["staggered","moving","idle","casting"]
+# due to the texture having bars on the sides, 
+const texture_fudge_factor = 6
 
-
-func _ready() -> void:
-	var h_box = get_node("HBoxContainer")
-	var under_texture = load(under_texture_path)
-	var progress_texture = load(progress_texture_path)
+func _ready():
+	$Timer.wait_time = tick_time
+	var h_box = $HBoxContainer
+	list_of_segments.append($HBoxContainer/mana_bar_segment)
 	
 	# Creates a number of segements based on number_of_segments variable.
 	# Adds all segments to list_of_segments, and adds all segemts as childs of
 	# the HBoxContainer. 
-	for i in range(number_of_segments):
-		var new_segment = TextureProgress.new()
-		new_segment.set_under_texture(under_texture)
-		new_segment.set_progress_texture(progress_texture)
-		new_segment.max_value = 50
-		# new_segment's value is set to 6 because the blue part of the mana bar
-		# segment does not start at the very edge of the image. So this offset 
-		# is nessisary to have the mana bar segments fill up correctly.
-		new_segment.value = 6
+	while len(list_of_segments) < number_of_segments:
+		var new_segment = $HBoxContainer/mana_bar_segment.duplicate()
 		h_box.add_child(new_segment)
 		list_of_segments.append(new_segment)
 
@@ -57,19 +49,11 @@ func spell_cast(cost):
 
 # This function repeats every 0.08 seconds based on this scenes timer node.
 # Adds mana to the mana bar if the player is idle.
+# todo fix this monstrosity
 func _on_Timer_timeout() -> void:
 	if player_idle:
-		for i in list_of_segments:
-			if i.value < 44:
-				i.value += 1
+		for bar in list_of_segments:
+			if bar.value < 44:
+				bar.value += 1
 				mana_total += 1
 				break
-
-
-# Signal got from player stops and starts the timer depending on wether the
-# player is idle.
-func _on_player_player_state_update(state):
-	if state == states[1]:
-		$Timer.stop()
-	elif state == states[2]:
-		$Timer.start()

@@ -1,0 +1,67 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://src/battle/mana_bar.gd" type="Script" id=1]
+[ext_resource path="res://src/battle/player/camera.gd" type="Script" id=2]
+[ext_resource path="res://src/battle/player/joystick_button.gd" type="Script" id=3]
+[ext_resource path="res://assets/battle/player/joystick-button-off.png" type="Texture" id=4]
+[ext_resource path="res://assets/battle/player/joystick-bg.png" type="Texture" id=5]
+[ext_resource path="res://assets/battle/player/joystick-button-on.png" type="Texture" id=6]
+[ext_resource path="res://assets/hud/mana_bar_empty.png" type="Texture" id=7]
+[ext_resource path="res://assets/hud/mana_bar_full.png" type="Texture" id=8]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 20.0
+
+[node name="camera_and_hud" type="Position2D"]
+script = ExtResource( 2 )
+
+[node name="camera" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+smoothing_speed = 4.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+
+[node name="hud_canvas_layer" type="CanvasLayer" parent="."]
+
+[node name="joystick" type="Sprite" parent="hud_canvas_layer"]
+modulate = Color( 1, 1, 1, 0.941176 )
+position = Vector2( 224.211, 438.947 )
+texture = ExtResource( 5 )
+
+[node name="joystick_button" type="TouchScreenButton" parent="hud_canvas_layer/joystick"]
+normal = ExtResource( 4 )
+pressed = ExtResource( 6 )
+shape = SubResource( 1 )
+script = ExtResource( 3 )
+
+[node name="mana_bar" type="Control" parent="hud_canvas_layer"]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="hud_canvas_layer/mana_bar"]
+margin_right = 218.0
+margin_bottom = 12.0
+custom_constants/separation = -6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="mana_bar_segment" type="TextureProgress" parent="hud_canvas_layer/mana_bar/HBoxContainer"]
+margin_right = 70.0
+margin_bottom = 12.0
+max_value = 50.0
+value = 6.0
+texture_under = ExtResource( 7 )
+texture_progress = ExtResource( 8 )
+
+[node name="Timer" type="Timer" parent="hud_canvas_layer/mana_bar"]
+wait_time = 0.08
+autostart = true
+[connection signal="timeout" from="hud_canvas_layer/mana_bar/Timer" to="hud_canvas_layer/mana_bar" method="_on_Timer_timeout"]

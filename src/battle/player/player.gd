@@ -7,6 +7,8 @@ extends KinematicBody2D
 
 # currently used for max speed
 export var speed: int = 100
+# holds a vector for camera use
+export var movement: Vector2
 
 var health: int
 var equipped_spells: Dictionary

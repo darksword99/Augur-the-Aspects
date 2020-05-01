@@ -16,7 +16,7 @@ func physics(player, movement, a_tree) -> String:
 		a_tree.set("parameters/walk_animations/blend_position", direction_vector)
 		a_state.travel("walk_animations")
 		# move player
-		movement = player.move_and_slide(movement * player.speed)
+		player.movement = player.move_and_slide(movement * player.speed)
 		
 	return "staggered"
 

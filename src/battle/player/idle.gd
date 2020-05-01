@@ -15,8 +15,8 @@ func physics(player: KinematicBody2D, movement: Vector2, a_tree: AnimationTree) 
 		a_tree.set("parameters/idle_animations/blend_position", direction_vector)
 		a_tree.set("parameters/walk_animations/blend_position", direction_vector)
 		a_state.travel("walk_animations")
-		# move player
-		movement = player.move_and_slide(movement * player.speed)
+		# move player, apply vector to movement property
+		player.movement = player.move_and_slide(movement * player.speed)
 		return "moving"
 		
 	else:

@@ -5,6 +5,7 @@
 
 extends KinematicBody2D
 
+# currently used for max speed
 export var speed: int = 100
 
 var health: int
@@ -13,6 +14,8 @@ var velocity: Vector2
 var current_state: String
 
 onready var stagger_timer = $stagger_timer
+onready var joystick = $hud/joystick/joystick_button
+onready var animate_tree = $animation_tree
 
 onready var states_map = {
 	"staggered": $states/staggered,
@@ -32,11 +35,11 @@ func _ready():
 	
 	# TODO: ask people smarter than me how to do this better
 
-func _physics_process(delta: float):
+func _physics_process(_delta: float):
 	# defers the call to the script accosiated with the current state
-	var new_state = states_map[current_state].physics(self, get_global_mouse_position(), delta)
+	# uses the joystick value to determine movement
+	var new_state = states_map[current_state].physics(self, joystick.get_value(), animate_tree)
 	_change_state(new_state)
-
 
 # changes state, we will eventually add animations with this function
 func _change_state(new_state: String):

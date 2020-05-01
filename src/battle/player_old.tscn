@@ -1,16 +1,59 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://src/battle/player/player.gd" type="Script" id=1]
 [ext_resource path="res://assets/battle/player/main-character-sprite-sheet.png" type="Texture" id=2]
-[ext_resource path="res://src/battle/player/idle.gd" type="Script" id=3]
-[ext_resource path="res://src/battle/player/moving.gd" type="Script" id=4]
-[ext_resource path="res://src/battle/player/staggered.gd" type="Script" id=5]
-[ext_resource path="res://src/battle/player/casting.gd" type="Script" id=6]
-[ext_resource path="res://src/battle/joystick.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/battle/health_bar.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/battle/player/camera.gd" type="Script" id=5]
+[ext_resource path="res://src/battle/joystick.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 2.81673
 height = 7.89209
+
+[sub_resource type="Animation" id=2]
+resource_name = "DamageRedFlicker"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("player_sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0.368627, 0.368627, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "NoDamage"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("player_sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("player_sprite:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
 [sub_resource type="Animation" id=4]
 resource_name = "idle_back"
@@ -212,6 +255,10 @@ start_node = "idle_animations"
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=25]
 
+[sub_resource type="CapsuleShape2D" id=26]
+radius = 5.1141
+height = 16.7774
+
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
@@ -225,7 +272,9 @@ position = Vector2( -2.29341, 10.695 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
-[node name="stagger_timer" type="Timer" parent="."]
+[node name="damage_animator" type="AnimationPlayer" parent="."]
+anims/DamageRedFlicker = SubResource( 2 )
+anims/NoDamage = SubResource( 3 )
 
 [node name="movement_animator" type="AnimationPlayer" parent="."]
 anims/idle_back = SubResource( 4 )
@@ -245,22 +294,37 @@ parameters/playback = SubResource( 25 )
 parameters/idle_animations/blend_position = Vector2( 0, 0 )
 parameters/walk_animations/blend_position = Vector2( 0, 0 )
 
-[node name="states" type="Node" parent="."]
+[node name="damage_int_timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
 
-[node name="staggered" type="Node" parent="states"]
+[node name="health_bar" parent="." instance=ExtResource( 3 )]
+margin_left = -12.7056
+margin_top = -22.3135
+margin_right = -12.7056
+margin_bottom = -22.3135
+rect_scale = Vector2( 0.5, 0.5 )
+
+[node name="player_area" type="Area2D" parent="."]
+
+[node name="player_hitbox" type="CollisionShape2D" parent="player_area"]
+position = Vector2( -2.28335, -1.59848 )
+shape = SubResource( 26 )
+
+[node name="camera_eye" type="Position2D" parent="."]
 script = ExtResource( 5 )
 
-[node name="moving" type="Node" parent="states"]
-script = ExtResource( 4 )
+[node name="camera" type="Camera2D" parent="camera_eye"]
+current = true
+smoothing_enabled = true
+smoothing_speed = 4.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
 
-[node name="idle" type="Node" parent="states"]
-script = ExtResource( 3 )
+[node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="casting" type="Node" parent="states"]
-script = ExtResource( 6 )
-
-[node name="hud" type="CanvasLayer" parent="."]
-
-[node name="joystick" parent="hud" instance=ExtResource( 7 )]
-position = Vector2( 224.211, 438.947 )
-[connection signal="timeout" from="stagger_timer" to="." method="_on_stagger_timer_timeout"]
+[node name="joystick" parent="HUD" instance=ExtResource( 6 )]
+position = Vector2( 228, 438 )
+[connection signal="timeout" from="damage_int_timer" to="." method="_on_DamageIntervalTimer_timeout"]

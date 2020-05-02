@@ -14,17 +14,20 @@ var sneak_threshold = 4
 const WALK_CONST = 0.5			
 const SNEAK_CONST = 0.1
 
+func _ready():
+	get_parent().visible = false
+	set_process_input(true)
 
 func get_button_pos():
 	return position + center
 	
-# Done each frame
+# done each frame
 func _process(delta):
 	if (drag == -1):
 		# return button to the center
 		var pos_diff = (Vector2.ZERO - center) - position
 		position += pos_diff * snap_accel * delta
-		
+
 
 func _input(event):
 	# check for if button is being dragged or pressed (for mobile devices)
@@ -50,7 +53,6 @@ func _input(event):
 		# for some reason setting visiblity to false or using .hide() sets process_input to false
 		get_parent().visible = false
 		set_process_input(true)
-		
 
 
 func get_value():

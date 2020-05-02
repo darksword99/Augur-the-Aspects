@@ -6,6 +6,7 @@ extends Node
 
 signal entered_staggered
 signal exited_staggered
+signal health_change
 
 func on_enter_state():
 	emit_signal("entered_staggered")
@@ -22,3 +23,6 @@ func physics(player: KinematicBody2D, movement: Vector2) -> String:
 
 func take_damage(_player, _damage: int) -> String:
 	return "staggered"
+
+func heal(_player, amount: int) -> void:
+	emit_signal("health_change", amount)

@@ -1,13 +1,13 @@
 [gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://src/battle/player/player.gd" type="Script" id=1]
-[ext_resource path="res://src/battle/hud.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/battle/player/staggered.gd" type="Script" id=3]
-[ext_resource path="res://src/battle/player/moving.gd" type="Script" id=4]
-[ext_resource path="res://src/battle/player/idle.gd" type="Script" id=5]
-[ext_resource path="res://src/battle/player/casting.gd" type="Script" id=6]
-[ext_resource path="res://src/battle/player/animation_handler.gd" type="Script" id=7]
-[ext_resource path="res://assets/battle/player/main-character-sprite-sheet.png" type="Texture" id=9]
+[ext_resource path="res://assets/battle/player/main-character-sprite-sheet.png" type="Texture" id=2]
+[ext_resource path="res://src/battle/player/animation_handler.gd" type="Script" id=3]
+[ext_resource path="res://src/battle/player/staggered.gd" type="Script" id=4]
+[ext_resource path="res://src/battle/player/moving.gd" type="Script" id=5]
+[ext_resource path="res://src/battle/player/idle.gd" type="Script" id=6]
+[ext_resource path="res://src/battle/player/casting.gd" type="Script" id=7]
+[ext_resource path="res://src/battle/hud.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 2.81673
@@ -225,12 +225,12 @@ shape = SubResource( 1 )
 [node name="stagger_timer" type="Timer" parent="."]
 
 [node name="player_sprite" type="Sprite" parent="."]
-texture = ExtResource( 9 )
+texture = ExtResource( 2 )
 hframes = 48
 frame = 32
 
 [node name="animation_handler" type="Node" parent="."]
-script = ExtResource( 7 )
+script = ExtResource( 3 )
 
 [node name="animation_player" type="AnimationPlayer" parent="animation_handler"]
 root_node = NodePath("../..")
@@ -256,22 +256,26 @@ __meta__ = {
 [node name="states" type="Node" parent="."]
 
 [node name="staggered" type="Node" parent="states"]
-script = ExtResource( 3 )
-
-[node name="moving" type="Node" parent="states"]
 script = ExtResource( 4 )
 
-[node name="idle" type="Node" parent="states"]
+[node name="moving" type="Node" parent="states"]
 script = ExtResource( 5 )
 
-[node name="casting" type="Node" parent="states"]
+[node name="idle" type="Node" parent="states"]
 script = ExtResource( 6 )
 
-[node name="camera_and_hud" parent="." instance=ExtResource( 2 )]
+[node name="casting" type="Node" parent="states"]
+script = ExtResource( 7 )
+
+[node name="camera_and_hud" parent="." instance=ExtResource( 8 )]
 [connection signal="timeout" from="stagger_timer" to="." method="_on_stagger_timer_timeout"]
 [connection signal="entered_staggered" from="states/staggered" to="animation_handler" method="_on_player_entered_staggered"]
+[connection signal="health_change" from="states/staggered" to="camera_and_hud" method="_on_staggered_health_change"]
 [connection signal="entered_moving" from="states/moving" to="animation_handler" method="_on_player_entered_moving"]
-[connection signal="entered_idle" from="states/idle" to="animation_handler" method="_on_player_entered_idle"]
+[connection signal="health_change" from="states/moving" to="camera_and_hud" method="_on_moving_health_change"]
 [connection signal="entered_idle" from="states/idle" to="camera_and_hud" method="_on_player_entered_idle"]
+[connection signal="entered_idle" from="states/idle" to="animation_handler" method="_on_player_entered_idle"]
 [connection signal="exited_idle" from="states/idle" to="camera_and_hud" method="_on_player_exited_idle"]
+[connection signal="health_change" from="states/idle" to="camera_and_hud" method="_on_idle_health_change"]
 [connection signal="entered_casting" from="states/casting" to="animation_handler" method="_on_player_entered_casting"]
+[connection signal="health_change" from="states/casting" to="camera_and_hud" method="_on_casting_health_change"]

@@ -52,6 +52,10 @@ func take_damage(damage: int):
 	var new_state = states_map[current_state].take_damage(self, damage)
 	_change_state(new_state)
 
+func heal(amount: int):
+	var new_state = states_map[current_state].heal(self, -amount)
+	_change_state(new_state)
+
 # saves the game with players health
 func _update():
 	PlayerStore.health = health

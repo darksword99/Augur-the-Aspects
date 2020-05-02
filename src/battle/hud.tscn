@@ -27,6 +27,7 @@ drag_margin_bottom = 0.0
 [node name="hud_canvas_layer" type="CanvasLayer" parent="."]
 
 [node name="joystick" type="Sprite" parent="hud_canvas_layer"]
+visible = false
 modulate = Color( 1, 1, 1, 0.941176 )
 position = Vector2( 224.211, 438.947 )
 texture = ExtResource( 5 )

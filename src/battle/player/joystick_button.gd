@@ -29,24 +29,27 @@ func _input(event):
 	# check for if button is being dragged or pressed (for mobile devices)
 	# in project settings > input devices > pointing, check "emulate touch from mouse"
 	if (event is InputEventScreenDrag or (event is InputEventScreenTouch and event.is_pressed())):
-		# length from click to center of joystick background
-		var dist_from_center = (event.position - get_parent().global_position).length()
+		# sets center of joystick background to click location
+		if event is InputEventScreenTouch:
+			get_parent().global_position = event.position
+			get_parent().show()
 		
-		# if pointer is within the joystick background, we can do stuff
-		if (dist_from_center <= max_dist * global_scale.x or event.get_index() == drag):
-			
-			set_global_position(event.position - radius * global_scale)
-			
-			# keeps button position within the radius of the joystick background
-			if (get_button_pos().length() > max_dist):
-				set_position(get_button_pos().normalized() * max_dist - radius)
+		set_global_position(event.position - radius * global_scale)
+		
+		# keeps button position within the radius of the joystick background
+		if (get_button_pos().length() > max_dist):
+			set_position(get_button_pos().normalized() * max_dist - radius)
+		
+		# keeps track of which pointer caused the movement
+		drag = event.get_index()
 	
-			# keeps track of which pointer caused the movement
-			drag = event.get_index()
-	
-	# if pointer released, we reset the drag
+	# if pointer released, we reset the drag and hide the Joystick
 	if (event is InputEventScreenTouch and !event.is_pressed() and event.get_index() == drag):
 		drag = -1
+		# for some reason setting visiblity to false or using .hide() sets process_input to false
+		get_parent().visible = false
+		set_process_input(true)
+		
 
 
 func get_value():

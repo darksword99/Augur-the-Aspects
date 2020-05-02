@@ -1,9 +1,10 @@
 extends TouchScreenButton
 
-var radius = Vector2(20, 20)	# Radius of the button
-var max_dist = 18 				# How far the button can be dragged from center
-var drag = -1					# Tracks which pointer is touching the screen
-var snap_accel = 20				# Accel for button to snap back to center
+#var radius = Vector2(20, 20)		# Radius of the button
+var center = pressed.get_size()/2	# cord for center of the pressed texture
+var max_dist = 18 					# How far the button can be dragged from center
+var drag = -1						# Tracks which pointer is touching the screen
+var snap_accel = 20					# Accel for button to snap back to center
 
 # Min dist to move joystick from center for each movement
 var run_threshold = 16			
@@ -15,13 +16,13 @@ const SNEAK_CONST = 0.1
 
 
 func get_button_pos():
-	return position + radius
+	return position + center
 	
 # Done each frame
 func _process(delta):
 	if (drag == -1):
 		# return button to the center
-		var pos_diff = (Vector2.ZERO - radius) - position
+		var pos_diff = (Vector2.ZERO - center) - position
 		position += pos_diff * snap_accel * delta
 		
 
@@ -34,11 +35,11 @@ func _input(event):
 			get_parent().global_position = event.position
 			get_parent().show()
 		
-		set_global_position(event.position - radius * global_scale)
+		set_global_position(event.position - center * global_scale)
 		
 		# keeps button position within the radius of the joystick background
 		if (get_button_pos().length() > max_dist):
-			set_position(get_button_pos().normalized() * max_dist - radius)
+			set_position(get_button_pos().normalized() * max_dist - center)
 		
 		# keeps track of which pointer caused the movement
 		drag = event.get_index()

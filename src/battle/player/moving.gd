@@ -1,11 +1,12 @@
 #
 # res://src/battle/player/moving.gd
-# handles movement and damage while moveing
+# handles movement and damage while moving
 #
 extends Node
 
 signal entered_moving
 signal exited_moving
+signal health_change
 
 func on_enter_state():
 	emit_signal("entered_moving")
@@ -30,5 +31,12 @@ func take_damage(player: KinematicBody2D, damage: int) -> String:
 	player.health -= damage
 	if player.health <= 0:
 		player.die()
+		
+	# emit signal for damage
+	emit_signal("health_change", damage)
+	
 	# return the new state
 	return "staggered"
+
+func heal(_player, amount: int) -> void:
+	emit_signal("health_change", amount)

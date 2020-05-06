@@ -1,0 +1,61 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://src/battle/battle.gd" type="Script" id=1]
+[ext_resource path="res://src/battle/ai/moving.gd" type="Script" id=2]
+[ext_resource path="res://src/battle/ai/scorpion.gd" type="Script" id=3]
+[ext_resource path="res://src/battle/player/player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/battle/misc/temp_scorpion.png" type="Texture" id=5]
+[ext_resource path="res://assets/battle/background/background_cobblestone.png" type="Texture" id=6]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array(  )
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 29.9704, 21.4871 )
+
+[node name="main" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 183.23, 286.283 )
+texture = ExtResource( 6 )
+
+[node name="player" parent="." instance=ExtResource( 4 )]
+position = Vector2( 170.307, 268.535 )
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource( 1 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+
+[node name="scorpion" type="KinematicBody2D" parent="Path2D/PathFollow2D"]
+position = Vector2( 165.27, 178.325 )
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/scorpion"]
+shape = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="Path2D/PathFollow2D/scorpion"]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 5 )
+
+[node name="Navigation2D" type="Navigation2D" parent="Path2D/PathFollow2D/scorpion"]
+
+[node name="states" type="Node" parent="Path2D/PathFollow2D/scorpion"]
+
+[node name="underground" type="Node" parent="Path2D/PathFollow2D/scorpion/states"]
+
+[node name="moving" type="Node" parent="Path2D/PathFollow2D/scorpion/states/underground"]
+script = ExtResource( 2 )
+
+[node name="charging" type="Node" parent="Path2D/PathFollow2D/scorpion/states/underground"]
+
+[node name="aboveground" type="Node" parent="Path2D/PathFollow2D/scorpion/states"]
+
+[node name="attacking" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground"]
+
+[node name="poke" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground/attacking"]
+
+[node name="beam" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground/attacking"]

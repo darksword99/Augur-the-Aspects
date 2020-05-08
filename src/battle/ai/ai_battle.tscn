@@ -6,11 +6,7 @@
 [ext_resource path="res://src/battle/player/player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/battle/misc/temp_scorpion.png" type="Texture" id=5]
 [ext_resource path="res://assets/battle/background/background_cobblestone.png" type="Texture" id=6]
-
-[sub_resource type="Curve2D" id=1]
-_data = {
-"points": PoolVector2Array(  )
-}
+[ext_resource path="res://assets/battle/misc/joystick-old.png" type="Texture" id=9]
 
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 29.9704, 21.4871 )
@@ -25,37 +21,62 @@ texture = ExtResource( 6 )
 [node name="player" parent="." instance=ExtResource( 4 )]
 position = Vector2( 170.307, 268.535 )
 
-[node name="Path2D" type="Path2D" parent="."]
-curve = SubResource( 1 )
-
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-
-[node name="scorpion" type="KinematicBody2D" parent="Path2D/PathFollow2D"]
+[node name="scorpion" type="KinematicBody2D" parent="."]
 position = Vector2( 165.27, 178.325 )
 script = ExtResource( 3 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/scorpion"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="scorpion"]
 shape = SubResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="Path2D/PathFollow2D/scorpion"]
+[node name="Sprite" type="Sprite" parent="scorpion"]
 scale = Vector2( 2, 2 )
 texture = ExtResource( 5 )
 
-[node name="Navigation2D" type="Navigation2D" parent="Path2D/PathFollow2D/scorpion"]
+[node name="Navigation2D" type="Navigation2D" parent="scorpion"]
 
-[node name="states" type="Node" parent="Path2D/PathFollow2D/scorpion"]
+[node name="Path2D" type="Path2D" parent="scorpion"]
+position = Vector2( -270.436, -336.55 )
+scale = Vector2( 1.1226, 1.17866 )
+curve = null
 
-[node name="underground" type="Node" parent="Path2D/PathFollow2D/scorpion/states"]
+[node name="PathFollow2D" type="PathFollow2D" parent="scorpion/Path2D"]
+position = Vector2( 165.77, 180.466 )
+rotation = 0.0243963
+cubic_interp = false
+loop = false
 
-[node name="moving" type="Node" parent="Path2D/PathFollow2D/scorpion/states/underground"]
+[node name="states" type="Node" parent="scorpion"]
+
+[node name="underground" type="Node" parent="scorpion/states"]
+
+[node name="moving" type="Node" parent="scorpion/states/underground"]
 script = ExtResource( 2 )
 
-[node name="charging" type="Node" parent="Path2D/PathFollow2D/scorpion/states/underground"]
+[node name="charging" type="Node" parent="scorpion/states/underground"]
 
-[node name="aboveground" type="Node" parent="Path2D/PathFollow2D/scorpion/states"]
+[node name="aboveground" type="Node" parent="scorpion/states"]
 
-[node name="attacking" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground"]
+[node name="attacking" type="Node" parent="scorpion/states/aboveground"]
 
-[node name="poke" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground/attacking"]
+[node name="poke" type="Node" parent="scorpion/states/aboveground/attacking"]
 
-[node name="beam" type="Node" parent="Path2D/PathFollow2D/scorpion/states/aboveground/attacking"]
+[node name="beam" type="Node" parent="scorpion/states/aboveground/attacking"]
+
+[node name="left_path" type="Position2D" parent="scorpion"]
+position = Vector2( 60, -60 )
+
+[node name="slight_left_path" type="Position2D" parent="scorpion"]
+position = Vector2( 90, -35 )
+
+[node name="straight_path" type="Position2D" parent="scorpion"]
+position = Vector2( 105, 0 )
+
+[node name="Sprite" type="Sprite" parent="scorpion/straight_path"]
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 9 )
+
+[node name="slight_right_path" type="Position2D" parent="scorpion"]
+position = Vector2( 90, 35 )
+
+[node name="right_path" type="Position2D" parent="scorpion"]
+position = Vector2( 60, 60 )

@@ -5,6 +5,8 @@ extends Node
 # var a: int = 2
 # var b: String = "text"
 var rng = RandomNumberGenerator.new()
+var scorpion
+var player
 
 onready var path_follow = $"../../../Path2D/PathFollow2D"
 onready var path_2d = $"../../../Path2D"
@@ -24,7 +26,7 @@ func _ready() -> void:
 
 
 
-func physics(scorpion) -> String:
+func physics(delta) -> String:
 	path_follow.offset += 1
 	scorpion.position = path_follow.position
 	scorpion.rotation = path_follow.rotation
@@ -38,3 +40,9 @@ func physics(scorpion) -> String:
 		next_curve.add_point(scorpion.position + get_node(paths[x]).position)
 		path_2d.set_curve(next_curve)
 	return "moving"
+
+
+func init(_scorpion, _player):
+	scorpion = _scorpion
+	player = _player
+

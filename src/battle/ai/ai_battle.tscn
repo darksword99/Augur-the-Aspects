@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://src/battle/battle.gd" type="Script" id=1]
 [ext_resource path="res://src/battle/ai/moving.gd" type="Script" id=2]
@@ -6,7 +6,10 @@
 [ext_resource path="res://src/battle/player/player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/battle/misc/temp_scorpion.png" type="Texture" id=5]
 [ext_resource path="res://assets/battle/background/background_cobblestone.png" type="Texture" id=6]
+[ext_resource path="res://src/battle/ai/poke.gd" type="Script" id=7]
+[ext_resource path="res://src/battle/ai/charging.gd" type="Script" id=8]
 [ext_resource path="res://assets/battle/misc/joystick-old.png" type="Texture" id=9]
+[ext_resource path="res://src/battle/ai/beam.gd" type="Script" id=10]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.9704, 21.4871 )
@@ -53,14 +56,17 @@ loop = false
 script = ExtResource( 2 )
 
 [node name="charging" type="Node" parent="scorpion/states/underground"]
+script = ExtResource( 8 )
 
 [node name="aboveground" type="Node" parent="scorpion/states"]
 
 [node name="attacking" type="Node" parent="scorpion/states/aboveground"]
 
 [node name="poke" type="Node" parent="scorpion/states/aboveground/attacking"]
+script = ExtResource( 7 )
 
 [node name="beam" type="Node" parent="scorpion/states/aboveground/attacking"]
+script = ExtResource( 10 )
 
 [node name="left_path" type="Position2D" parent="scorpion"]
 position = Vector2( 60, -60 )

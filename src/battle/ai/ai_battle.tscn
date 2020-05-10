@@ -8,7 +8,7 @@
 [ext_resource path="res://assets/battle/background/background_cobblestone.png" type="Texture" id=6]
 [ext_resource path="res://assets/battle/misc/joystick-old.png" type="Texture" id=9]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.9704, 21.4871 )
 
 [node name="main" type="Node2D"]
@@ -26,7 +26,7 @@ position = Vector2( 165.27, 178.325 )
 script = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="scorpion"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="scorpion"]
 scale = Vector2( 2, 2 )
